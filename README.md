@@ -28,12 +28,11 @@ end if
 ```
 ### Hirschberg’s Algorithm
 
-Hirschberg’s Algorithm can be described as a "divide and conquer" version of the Needleman-Wunsch algorithm. The key advantage of it is that it uses space complexity which is only linear in the lengths of the strings. In this algorithm, we will have a forwards subprogram and backwards subprogram, described below. In this method we will initialise the score matrix SM as with the N-W algorithm, which will be used to evaluate similarity between characters in the same way. Let score(x, y) denote the similarity score between two sequences x and y. Also, let pref ix(x, i) denote the subsequence of x which is comprised of the first i characters. Similarly, suff ix(x, i) denotes the subsequence comprised of the final i characters of x. 
+Hirschberg’s Algorithm can be described as a "divide and conquer" version of the Needleman-Wunsch algorithm. The key advantage of it is that it uses space complexity which is only linear in the lengths of the strings. In this algorithm, we will have a forwards subprogram and backwards subprogram, described below. In this method we will initialise the score matrix SM as with the N-W algorithm, which will be used to evaluate similarity between characters in the same way. Let score(x, y) denote the similarity score between two sequences x and y. Also, let pref ix(x, i) denote the subsequence of x which is comprised of the first i characters. Similarly, suff ix(x, i) denotes the subsequence comprised of the final i characters of x. Our algorithm can be implemented as a combination of three main routines:
 
-**Our algorithm can be implemented as a combination of three main routines:**
-
-* Forward(x, y)
-This routine takes as input two sequences x and y, and outputs an array of length m (size of y), which holds the m different scores between x and a prefix of y.The routine starts by initialising an empty matrix T of size (n + 1)(m + 1) like in the N-W algorithm. Then, it sets T(0, j) = j*gapPenalty, for each 0 <= j <= m, where gapPenalty is the score applied for the insertion of a character. Now execute the following loop:
+**Forward(x, y)**
+This routine takes as input two sequences x and y, and outputs an array of length m (size of y), which holds the m different scores between x and a prefix of y.
+The routine starts by initialising an empty matrix T of size (n + 1)(m + 1) like in the N-W algorithm. Then, it sets T(0, j) = j*gapPenalty, for each 0 <= j <= m, where gapPenalty is the score applied for the insertion of a character. Now execute the following loop:
 ```
 for i from 1 to n do
     T(i, 0) = T(i − 1, 0) + gapPenalty
