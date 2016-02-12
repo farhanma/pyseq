@@ -79,3 +79,11 @@ Now, we have a splitting point, we can recursively call the Hirschberg algorithm
 * Hirschberg(*xright*, suffix(y, m − cut))
 
 By combining the alignment of the prefixes of x and y, with the alignment of the suffixes of x and y, we get an alignment between x and y. Finally, return concatenated alignment of x and y.
+
+## Implementation Details
+
+The scripts for this project were written in Python 2.7. Two functions were created, “nw” and “hirschberg”. Both take as input two string sequences, and output the optimal alignment and corresponding similarity score.
+
+"nw" creates an (n + 1)(m + 1) matrix, implemented using the array data structure. This has the advantage of constant time storage and look-up of elements in the matrix. The general process of this function adheres to the recursive relation described in the N-W algorithm section.
+
+In the "hirschberg" function, at each recursive step we call the "forwards" and "backwards" subroutines to determine the optimal splitting point in linear time. All data is stored in arrays, however it can be removed from memory once we find the splitting point. Once we determine the splitting point we divide the strings into two partitions each, and recall the "hirschberg" function on the pair of prefixes and pair of suffixes. When the recursion reaches the base cases, strings of length 0 or 1, we simply import the "nw" function described above and use it to solve the trivial cases.
