@@ -31,6 +31,7 @@ end if
 Hirschberg’s Algorithm can be described as a "divide and conquer" version of the Needleman-Wunsch algorithm. The key advantage of it is that it uses space complexity which is only linear in the lengths of the strings. In this algorithm, we will have a forwards subprogram and backwards subprogram, described below. In this method we will initialise the score matrix SM as with the N-W algorithm, which will be used to evaluate similarity between characters in the same way. Let score(x, y) denote the similarity score between two sequences x and y. Also, let pref ix(x, i) denote the subsequence of x which is comprised of the first i characters. Similarly, suff ix(x, i) denotes the subsequence comprised of the final i characters of x. Our algorithm can be implemented as a combination of three main routines:
 
 **Forward(x, y)**
+
 This routine takes as input two sequences x and y, and outputs an array of length m (size of y), which holds the m different scores between x and a prefix of y.
 The routine starts by initialising an empty matrix T of size (n + 1)(m + 1) like in the N-W algorithm. Then, it sets T(0, j) = j*gapPenalty, for each 0 <= j <= m, where gapPenalty is the score applied for the insertion of a character. Now execute the following loop:
 ```
@@ -44,3 +45,33 @@ for i from 1 to n do
 end for
 ```
 Note that this loop caculates the matrix values row by row, similarly to the N-W algorithm. However, each time we store a new value we delete the corresponding value diagonally up-left from it, which is no longer needed. After the loop finishes we end up with the final row. Finally, it outputs row T(n, j), for 0 <= j <= m.
+
+**Backward(x, y)**
+
+This routine is essentially identical to the forwards routine, but will use suffixes of the strings instead of prefixes. It will again output an array of length m. The routine follows the following steps:
+
+First, initialise an empty Matrix S of size (n + 1)(m + 1). This is almost the same as our previous matrix T but this time S(i, j) is the similarity scores between the suffix of x of size I and the suffix of y of size j.
+Then, set S(0, j) = j*gapPenalty for each 0 <= j <= m, where gapPenalty is the scored applied for insertion of a character.
+Now, execute the following loop:
+```
+for i from 1 to n do
+    S(i, 0) = S(i − 1, 0) + gapPenalty
+    for j from 1 to m do
+      S(i, j) = min[S(i-1, j) + gapPenalty, S(i, j-1) + gapPenalty, S(i − 1, j − 1) + SM(n-i-1, n-j-1)]
+      Delete S(i − 1, j − 1) from memory
+    end for
+  Delete S(i − 1, j − 1) from memory
+end for
+```
+Note that this loop calculates the matrix values row by row, similarly to the N-W algorithm. However, each time we store a new value we delete the corresponding value diagonally up-left from it, which is no longer needed. After the loop finishes we end up with the final row.
+Finally, Output row {S(n, j), for 0 <= j <= m}.
+
+**Hirschberg(x, y)**
+
+This recursive routine will call Forwards() and Backwards() as subroutines, and will accept as input the two sequences we wish to compute the score for. It will otuput the optimal alignment of x and y. If n <= 1 or m <= 1, we trivially output the alignment of x and y
+using the standard N-W algorithm. Else, partition x into two halves; *xlef* t is the first half of x, and *xright* is the final half. This is where the "Divide and Conquer" method plays its role. Next, we will call the Forwards and Backwards routines once each. Let F = Forwards(xlef t, y) and B = Backwards(right, y). So we have two arrays each of size m. Compute cut = value of j which minimises: F(j) + B(m − j); 0 <= j <= m. This can be computed in linear time; reading off the values from F and B for each value of j. Note that for each j, the quantity F(j) + B(m − j) represents the score of matching xlef t with pref ix(y, j), added to the score of matching xright with suff ix(y, m−j), i.e. the two partitioned sequences are matched in a way that forces the left half of x to be matched to the left partition of y, whilst the right half of x matches to the right partition of y. Note that the final optimal alignment will definitely divide this way for some value of j, hence, by finding the value of j which minimises the score we have in fact determined that the optimal alignment splits at cut. Now, we have a splitting point, we can recursively call the Hirschberg algorithm on the smaller subsequences of x and y, and output the corresponding alignments:
+
+* Hirschberg(*xleft*, prefix(y, cut))
+* Hirschberg(*xright*, suffix(y, m − cut))
+
+By combining the alignment of the prefixes of x and y, with the alignment of the suffixes of x and y, we get an alignment between x and y. Finally, return concatenated alignment of x and y.
