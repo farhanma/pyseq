@@ -15,7 +15,7 @@ The N-W algorithm is a dynamic programming algorithm that builds up the best ali
 
 **The algorithm can be implemented in three steps:**
 *  Initialising the score matrix SM: The chosen substitution scores are stored in a score matrix SM, where each cell SM(xi, yi) reflects the score of the substitution of one character with another character from the specified character domain. The size of SM depends on the size of the character domain. For example, the size of SM is 44 for DNA with character domain C, T, A, G and is 2020 for proteins with character domain {A, R, N, D, C, Q, E, G, H, I, L, K, M, F, P, S, T, W, Y, V}. For the purposes of this project, and for the simplicity, the BLOSUM62 (Appendix A) score matrix for proteins is used
-*  Filling the traceback matrix TM and obtain T(n, m) as the similarity score: The traceback matrix TM is filled using the following recurrence relation: `TM(i,j) = max[TM(i-1, j) + gapPenalty, TM(i, j-1) + gapPenalty, TM(i − 1, j − 1) + SM(xj, yj )]` Note that for the first row (i, j = 0) and the first column (i = 0, j), the formula will return a multiple of the gap penalty
+*  Filling the traceback matrix TM and obtain T(n, m) as the similarity score: The traceback matrix TM is filled using the following recurrence relation: `TM(i,j) = max[TM(i-1, j) + gapPenalty, TM(i, j-1) + gapPenalty, TM(i − 1, j − 1) + SM(xj, yj )]`. Note that for the first row (i, j = 0) and the first column (i = 0, j), the formula will return a multiple of the gap penalty
 *  Deducing the optimal alignment from the traceback matrix TM: Start from TM(n, m) and follow below condition rules until reaching TM(1, 1)
 ```
 if TM(i, j) = TM(i − 1, j − 1) + SM(xi, yj )TM(i − 1, j − 1) then
@@ -26,3 +26,22 @@ else if TM(i, j) = TM(i, j − 1) + gapPenalty then
   move up (gap in first sequence) and repeat on TM(i, j − 1)
 end if
 ```
+### Hirschberg’s Algorithm
+
+Hirschberg’s Algorithm can be described as a "divide and conquer" version of the Needleman-Wunsch algorithm. The key advantage of it is that it uses space complexity which is only linear in the lengths of the strings. In this algorithm, we will have a forwards subprogram and backwards subprogram, described below. In this method we will initialise the score matrix SM as with the N-W algorithm, which will be used to evaluate similarity between characters in the same way. Let score(x, y) denote the similarity score between two sequences x and y. Also, let pref ix(x, i) denote the subsequence of x which is comprised of the first i characters. Similarly, suff ix(x, i) denotes the subsequence comprised of the final i characters of x. 
+
+**Our algorithm can be implemented as a combination of three main routines:**
+
+* Forward(x, y)
+This routine takes as input two sequences x and y, and outputs an array of length m (size of y), which holds the m different scores between x and a prefix of y.The routine starts by initialising an empty matrix T of size (n + 1)(m + 1) like in the N-W algorithm. Then, it sets T(0, j) = j*gapPenalty, for each 0 <= j <= m, where gapPenalty is the score applied for the insertion of a character. Now execute the following loop:
+```
+for i from 1 to n do
+    T(i, 0) = T(i − 1, 0) + gapPenalty
+    for j from 1 to m do
+      T(i, j) = min[TM(i-1, j) + gapPenalty, TM(i, j-1) + gapPenalty, TM(i − 1, j − 1) + SM(xj, yj )]
+      Delete T(i − 1, j − 1) from memory
+    end for
+  Delete T(i − 1, m) from memory
+end for
+```
+Note that this loop caculates the matrix values row by row, similarly to the N-W algorithm. However, each time we store a new value we delete the corresponding value diagonally up-left from it, which is no longer needed. After the loop finishes we end up with the final row. Finally, it outputs row T(n, j), for 0 <= j <= m.
