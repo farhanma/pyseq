@@ -20,9 +20,9 @@ The N-W algorithm is a dynamic programming algorithm that builds up the best ali
 ```
 if TM(i, j) = TM(i − 1, j − 1) + SM(xi, yj )TM(i − 1, j − 1) then
   move diagonally (match/mismatch) and repeat on TM(i − 1, j − 1)
-else if TM(i, j) = TM(i − 1, j) + gapP enalty then
+else if TM(i, j) = TM(i − 1, j) + gapPenalty then
   move left (gap in second sequence) and repeat on TM(i − 1, j)
-else if TM(i, j) = TM(i, j − 1) + gapP enalty then
+else if TM(i, j) = TM(i, j − 1) + gapPenalty then
   move up (gap in first sequence) and repeat on TM(i, j − 1)
 end if
 ```
