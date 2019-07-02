@@ -2,8 +2,6 @@
 
 Proteins consist of amino acid chains, and aligning the amino acid sequences of related proteins may show which regions have functional or structural importance. Global sequence alignment attempts to find the optimal alignment of two sequences of characters across their entire spans. In this project, we implement two dynamic programming algorithms for global sequence alignment: the Needleman-Wunsch algorithm and Hirschberg’s algorithm in Python. This is a course project that is intended to examine the theoretical runtime experimentally, through a sophisticated sequential implementation of the two algorithms in Python. 
 
-For more information about the project, please download the report from: https://www.dropbox.com/s/05vu3blfrhyfrom/documentation.tar.gz?dl=0
-
 **Development Team:**
 * Liam Mencel (liam.mencel@kaust.edu.sa)
 * Mohammed Al Farhan (mohammed.farhan@kaust.edu.sa)
