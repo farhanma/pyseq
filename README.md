@@ -4,8 +4,8 @@ Proteins consist of amino acid chains, and aligning the amino acid sequences of 
 
 **Development Team:**
 * Mohammed Al Farhan (mohammed.farhan@kaust.edu.sa)
-* Liam Mencel (liam.mencel@kaust.edu.sa)
 * Ahmad Shono (ahmad.shono@kaust.edu.sa)
+* Liam Mencel (liam.mencel@kaust.edu.sa)
 * Nabeelah Ali (nabeelah.ali@kaust.edu.sa)
 
 ## Algorithm Details
